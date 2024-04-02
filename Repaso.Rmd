@@ -1,0 +1,502 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+datos<-c(11,14,20,23,31,36,39,44,47,50,51,61,65,67,68,71,74,76,78,79,81,84,85,89,91,93,98,99,101,104,105,105,112,118,123,136,139,141,148,158,189,168,184,206,248,263,289,322,388,513)
+
+
+Q1<-quantile(datos,0.25)
+Media<-quantile(datos,0.50)
+Q3<-quantile(datos,0.75)
+RI<-IQR(datos)
+Rango<-max(datos)-min(datos)
+n<-length(datos)
+Nclases<-1+log2(n)
+Anchoclase<-Rango/Nclases
+plot(datos)
+
+LS<-Q3+1.5*RI
+LI<-Q1-1.5*RI
+
+#print(Q1)
+#print(Media)
+#print(Q3)
+#print(RI)
+
+print(LI)
+print(LS)
+print(Rango)
+print(Nclases)
+print(Anchoclase)
+```
+
+```{r}
+library(modeest)
+dato<-c(28,35,42,90,70,56,75,66,30,89,75,64,81,69,55,83,72,68,73,16)
+or<-sort(dato)
+print(or)
+
+media<-mean(or)
+suma<-sum(or)/20
+mediana<-median(or)
+moda<-mfv(or)
+q1<-quantile(or,0.8)
+ri<-IQR(or)
+varianzaMuestr<-var(or)
+VarianzaPobla<-sum((or-mean(or))^2)/length(or)
+desviacionestandarmuestral<-sd(or)
+
+coefVariacion<-sd(or)/mean(or)
+
+
+```
+```{r}
+0.35+0.25
+```
+```{r}
+#library(e1071)
+dato<-c(28,35,42,90,70,56,75,66,30,89,75,64,81,69,55,83,72,68,73,16)
+
+simetria<-skewness(dato)
+```
+
+```{r}
+U<-c(0,1,2,3,4,5,6)
+A<-c(0,1,2,3,4)
+B<-c(3,4,5,6,7)
+C<-c(1,3,5)
+
+AUB<-union(A,B)
+U_A<-setdiff(U,A)
+AUC<-union(A,C)
+AnB<-intersect(A,B)
+AC<-setdiff(A,C)
+AnCc<-setdiff(U,(intersect(A,C)))
+AcU<-A %in% U
+print(AUB)
+print(Ac)
+print(AUC)
+print(AnB)
+print(AC)
+print(AnCc)
+
+```
+
+```{r}
+
+bolas_urna1 <- c(blanca = 3, negra = 7)
+bolas_urna2 <- c(blanca = 5, negra = 5)
+
+prob_elegir_urna <- 1 / 2
+
+
+calcular_probabilidades <- function(bolas_urna) {
+  total_bolas <- sum(bolas_urna)
+  prob_blanca <- bolas_urna["blanca"] / total_bolas * prob_elegir_urna
+  prob_negra <- bolas_urna["negra"] / total_bolas * prob_elegir_urna
+  return(c(B = prob_blanca, N = prob_negra))
+}
+
+
+prob_urna1 <- calcular_probabilidades(bolas_urna1)
+prob_urna2 <- calcular_probabilidades(bolas_urna2)
+
+
+prob_total <- prob_urna1 + prob_urna2
+
+
+tabla_probabilidades <- rbind(prob_urna1, prob_urna2, prob_total)
+rownames(tabla_probabilidades) <- c("U1", "U2", "Total")
+
+
+tabla_imprimir <- as.data.frame(tabla_probabilidades)
+tabla_imprimir <- cbind(Urna = rownames(tabla_imprimir), tabla_imprimir)
+rownames(tabla_imprimir) <- NULL
+
+
+tabla_imprimir$Total <- c("1/2", "1/2", "1")
+
+
+print(tabla_imprimir)
+
+
+
+
+```
+
+
+
+```{r}
+# Para permutaciones de todos los elementos
+n <- 4
+numero_de_permutaciones <- factorial(n)
+
+# Mostrar el número de permutaciones
+print(numero_de_permutaciones)
+
+# Para permutaciones de r elementos de un conjunto de n elementos
+r <- 2
+numero_de_permutaciones_r <- factorial(n) / factorial(n - r)
+
+# Mostrar el número de permutaciones
+print(numero_de_permutaciones_r)
+
+```
+```{r}
+# Combinaciones
+n <- 20
+numero_de_permutaciones <- factorial(n)
+
+# Mostrar el número de permutaciones
+print(numero_de_permutaciones)
+
+# Para permutaciones de r elementos de un conjunto de n elementos
+r <- 4
+numero_de_permutaciones_r <- factorial(n) /(factorial(r)* factorial(n - r))
+
+# Mostrar el número de permutaciones
+print(numero_de_permutaciones_r)
+
+```
+
+
+```{r}
+# Cargar ggplot2 si es necesario
+if (!require(ggplot2)) install.packages("ggplot2")
+library(ggplot2)
+
+# Definir la función de densidad
+f <- function(x) {
+  ifelse(x >= 3 & x <= 5, x*(0.075 * x + 0.2), 0)
+}
+
+# Crear una secuencia de valores de x desde 3 hasta 5
+x_vals <- seq(3, 5, by = 0.01)
+
+# Calcular los valores de y utilizando la función de densidad
+y_vals <- f(x_vals)
+
+# Crear un data frame para la graficación
+df <- data.frame(x = x_vals, y = y_vals)
+
+
+
+# Calcular la probabilidad P(3 <= X <= 4) integrando la función de densidad
+prob_3_4 <- integrate(f, lower = 3, upper = 5)$value
+
+# Imprimir la probabilidad
+prob_3_4
+
+```
+
+
+```{r}
+## Definir la función de densidad de probabilidad
+f <- function(x) {
+  ifelse(x >= 3 & x <= 5, 0.075 * x + 0.2, 0)
+}
+
+# Definir la función para calcular la CDF en un punto x
+F <- function(x) {
+  if (x < 3) {
+    # Si x está fuera del rango por el extremo inferior, la CDF es 0
+    return(0)
+  } else if (x > 5) {
+    # Si x está fuera del rango por el extremo superior, la CDF es 1
+    return(1)
+  } else {
+    # Integrar la función de densidad desde 3 hasta x
+    integrate(f, lower = 3, upper = x)$value
+  }
+}
+
+
+
+
+
+```
+
+
+hipergeometrica
+
+```{r}
+# Parámetros de la distribución hipergeométrica
+m <- 3  # Número de discos duros defectuosos
+n <- 20 - m  # Número de discos duros no defectuosos
+k <- 4  # Número de discos duros seleccionados
+
+# Calculamos la esperanza como la sumatoria de x * P(X = x)
+valores_x <- 0:min(m, k)  # Los valores posibles que X puede tomar
+probabilidades <- dhyper(valores_x, m, n, k)  # Las probabilidades asociadas a cada valor de x
+
+# Esperanza E(X)
+E_X <- sum(valores_x * probabilidades)
+E_X
+
+
+```
+
+binormal
+```{r}
+print(probabilidad_todos <- dbinom(7, size = 7, prob = 0.3))
+print(probabilidad_todos <- dbinom(3, size = 3, prob = 1/3))
+
+print(probabilidad_al_menos_dos <- 1-pbinom(8,10,0.3))
+print(probabilidad_al_menos_dos <- 1-pbinom(0,3,1/3))
+esperanza <- 7 * 0.3
+varianza <- 7 * 0.3 * 0.7
+
+
+
+```
+
+
+poisson
+```{r}
+
+print(Poison<-dpois(6,8))
+print(1-dpois(0,6))
+print(1-ppois(19,8*(2.5)))
+
+```
+
+distribución uniforme
+
+```{r}
+
+# Definimos los parámetros de la distribución uniforme
+min_dias <- 1
+max_dias <- 5
+
+# 1. Probabilidad de que el tiempo de entrega sea mayor a dos días
+prob_mayor_2 <- 1 - punif(2, min_dias, max_dias)
+
+# 2. Costo esperado en términos de c0 y c1
+# Primero definimos las variables c0 y c1 simbólicamente, asumiendo que son conocidas
+c0 <- 1 # Sustituye con el valor real de c0
+c1 <- 1 # Sustituye con el valor real de c1
+
+# Calculamos la integral del costo esperado sobre la distribución uniforme
+costo_esperado <- (1/(max_dias - min_dias)) * integrate(function(y) c0 + c1 *
+                                                          
+                                                          
+                                                          
+                                                          
+                                                          
+                                                          
+                                                          
+                                                          
+                                                          
+                                                          
+                                                          
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        y^2, min_dias, max_dias)$value
+
+# Imprimir los resultados
+print(paste("Probabilidad de que el tiempo de entrega sea mayor a dos días:", prob_mayor_2))
+print(paste("Costo esperado E[C]:", costo_esperado))
+
+
+```
+
+```{r}
+# Establecemos la tasa para la distribución exponencial
+rate <- 1 / 2.4
+
+# 1. Probabilidad de que la magnitud sea mayor a 3.0
+prob_mayor_3 <- 1 - pexp(3.0, rate)
+
+# 2. Probabilidad de que la magnitud esté entre 2.0 y 3.0
+prob_entre_2_y_3 <- pexp(3.0, rate) - pexp(2.0, rate)
+
+# Mostrar los resultados
+print(paste("Probabilidad de que la magnitud sea mayor a 3.0:", prob_mayor_3))
+print(paste("Probabilidad de que la magnitud esté entre 2.0 y 3.0:", prob_entre_2_y_3))
+
+
+```
+exponencial
+
+```{r}
+# Media de la distribución exponencial
+media <- 100
+# Tasa es el inverso de la media
+rate <- 1 / media
+
+# 1. Probabilidad de que la demanda sea mayor a 200 pcs
+probabilidad_mayor_200 <- 1 - pexp(200, rate)
+
+# 2. Capacidad de bombeo para que la probabilidad de superarla sea solo 0.01
+# Utilizamos el cuantil para la probabilidad complementaria, 1 - 0.01, es decir 0.99
+capacidad_requerida <- qexp(0.99, rate)
+
+# Mostrar los resultados
+print(paste("Probabilidad de que la demanda sea mayor a 200 pcs:", probabilidad_mayor_200))
+print(paste("Capacidad de bombeo requerida para que la probabilidad de superarla sea solo de 0.01:", capacidad_requerida))
+
+```
+
+normal
+```{r}
+
+# Parámetros de la distribución normal
+media <- 950  # media en mm
+desviacion_std <- 10  # desviación estándar en mm
+
+# 1. Probabilidad de que el ancho sea entre 947 y 958 mm
+probabilidad_entre_947_958 <- pnorm(958, media, desviacion_std) - pnorm(947, media, desviacion_std)
+
+# 2. Encontrar el valor de C para el cual la probabilidad de tener un ancho menor es 0.8531
+C <- qnorm(0.8531, media, desviacion_std)
+
+# Mostrar los resultados
+print(paste("Probabilidad de que el ancho sea entre 947 y 958 mm:", probabilidad_entre_947_958))
+print(paste("Valor de C para una probabilidad acumulada de 0.8531:", C))
+
+```
+
+
+```{r}
+# Parámetros de la distribución normal
+media <- 12.4  # media en onzas
+desviacion_std <- 0.1  # desviación estándar en onzas
+
+# 1. Proporción de vasos desechados
+p_menos_12_1 <- pnorm(12.1, media, desviacion_std)
+p_mas_12_6 <- 1 - pnorm(12.6, media, desviacion_std)
+proporcion_desechados <- p_menos_12_1 + p_mas_12_6
+
+# 2. Volumen para el 80% de los vasos
+volumen_80 <- qnorm(0.8, media, desviacion_std)
+
+# 3. Probabilidad de derrame en por lo menos 8 de 20 vasos
+p_derrame_vaso <- 1 - pnorm(12.5, media, desviacion_std)
+n_vasos <- 20
+al_menos_8_derrames <- 1 - pbinom(7, n_vasos, p_derrame_vaso)
+
+# Mostrar los resultados
+print(paste("Proporción de vasos desechados:", proporcion_desechados))
+print(paste("Volumen por debajo del cual se encuentra el 80% de los vasos:", volumen_80))
+print(paste("Probabilidad de que se derrame el contenido en por lo menos 8 de los 20 vasos:", al_menos_8_derrames))
+
+```
+
